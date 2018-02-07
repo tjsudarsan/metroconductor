@@ -1,4 +1,15 @@
+import React from 'react'
 import { AppRegistry } from 'react-native';
-import Routes from './src/router'
+import ReduxStore from './src/redux/store/ReduxStore';
+import {Provider} from 'react-redux';
+import Routes from './src/router';
 
-AppRegistry.registerComponent('metroconductor', () => Routes);
+const App = ()=>{
+    return (
+        <Provider store={ReduxStore()}>
+            <Routes />
+        </Provider>
+    )
+}
+
+AppRegistry.registerComponent('metroconductor', () => App);
