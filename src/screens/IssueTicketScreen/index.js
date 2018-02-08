@@ -1,5 +1,8 @@
 import React, { Fragment } from 'react';
-import { View, Text, ScrollView, ActivityIndicator, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, TextInput, TouchableOpacity, Picker, Alert } from 'react-native';
+import {connect} from 'react-redux';
+import {initializeBus} from '../../services'
+import {saveFromAndTo} from '../../redux/actions/userActions'
 
 class IssueTicketScreen extends React.Component {
     constructor() {
@@ -7,9 +10,63 @@ class IssueTicketScreen extends React.Component {
         this.state = {
             isLoading: false,
             isFareLoading: false,
-            fare: null
+            fare: null,
+            fromLocation: null,
+            toLocation: null,
+            busDetails: {}
         }
     }
+
+    handleFromSelect(from){
+        this.setState({fromLocation: from});
+        if(this.state.toLocation !== from && this.state.toLocation !== null && from !== 0){
+            var fare = this.props.busDetails.stageWiseFare[Math.abs(this.props.busDetails.stageNames.indexOf(from) - this.props.busDetails.stageNames.indexOf(this.state.toLocation))-1]
+            this.setState({fare,isFareLoading:false});
+        }else if(this.state.toLocation === from){
+            Alert.alert(
+                'Attention!',
+                'From and To cannot be same',
+                [{text: 'Ok'}],
+                {cancelable: false}
+            )
+            this.setState({fromLocation: null,toLocation:null})
+        }else {
+            this.setState({fare: null})
+        }
+    }
+
+    handleToSelect(to){
+        this.setState({toLocation: to});
+        if(this.state.fromLocation !== to && this.state.fromLocation !== null && to !== 0){
+            var fare = this.props.busDetails.stageWiseFare[Math.abs(this.props.busDetails.stageNames.indexOf(this.state.fromLocation) - this.props.busDetails.stageNames.indexOf(to))-1]
+            this.setState({fare,isFareLoading: false});
+        }else if(this.state.fromLocation === to){
+            Alert.alert(
+                'Attention!',
+                'From and To cannot be same',
+                [{text: 'Ok'}],
+                {cancelable: false}
+            )
+            this.setState({fromLocation: null,toLocation:null})
+        }else {
+            this.setState({fare: null})
+        }
+    }
+
+    handleScanQRCode(){
+        if(this.state.toLocation !== null, this.state.fromLocation !== null){
+            this.props.dispatch(saveFromAndTo(this.state.fromLocation,this.state.toLocation));
+            this.props.history.push('/scanqr');
+        }else{
+            Alert.alert(
+                'Attention!',
+                'Select both from and to',
+                [{text: 'OK'}],
+                {cancelable: false}
+            )
+        }
+    }
+
     render() {
         return (
             <ScrollView contentContainerStyle={[styles.container, { justifyContent: `${this.state.isLoading ? 'center' : 'flex-start'}` }]} keyboardShouldPersistTaps={"always"}>
@@ -19,21 +76,43 @@ class IssueTicketScreen extends React.Component {
                         <View style={styles.header}>
                             <Text style={{ color: 'white', fontSize: 20 }}>Issue Ticket</Text>
                         </View>
-                        <View style={styles.fromAndTo}>
-                            <TextInput
-                                style={styles.textInput}
-                                onChangeText={(e) => this.setState({ busNo: e.toUpperCase() })}
-                                placeholderTextColor="#b90000"
-                                underlineColorAndroid="#b90000"
-                                placeholder='From Location'
-                            />
-                            <TextInput
-                                style={styles.textInput}
-                                onChangeText={(e) => this.setState({ busNo: e.toUpperCase() })}
-                                placeholderTextColor="#b90000"
-                                underlineColorAndroid="#b90000"
-                                placeholder='To Location'
-                            />
+                        <View style={{flexDirection: 'row',alignItems:'center',marginBottom: 5}}>
+                            <Text style={styles.label}>From: </Text>
+                            <View style={styles.stageDropdowns}>
+                                <Picker
+                                    style={{width: 200,color: '#b90000'}}
+                                    mode="dialog"
+                                    selectedValue={this.state.fromLocation}
+                                    onValueChange={(itemValue)=>this.handleFromSelect(itemValue)}
+                                    prompt="Select location"
+                                >
+                                    <Picker.Item label={'Select From'} value={0} />
+                                    {this.props.busDetails.stageNames !== undefined ? this.props.busDetails.stageNames.map((stage,key)=>{
+                                        return (
+                                            <Picker.Item key={key} label={stage} value={stage} />
+                                        )
+                                    }) :null }
+                                </Picker>
+                            </View>
+                        </View>
+                        <View style={{flexDirection: 'row',alignItems:'center'}}>
+                            <Text style={styles.label}>To:      </Text>
+                            <View style={styles.stageDropdowns}>
+                                <Picker
+                                    style={{width: 200,color: '#b90000'}}
+                                    mode="dialog"
+                                    selectedValue={this.state.toLocation}
+                                    onValueChange={(itemValue)=>this.handleToSelect(itemValue)}
+                                    prompt="Select location"
+                                >
+                                    <Picker.Item label={'Select To'} value={0} />
+                                    {this.props.busDetails.stageNames!== undefined ? this.props.busDetails.stageNames.map((stage,key)=>{
+                                        return (
+                                            <Picker.Item key={key} label={stage} value={stage} />
+                                        )
+                                    }) :null }
+                                </Picker>
+                            </View>
                         </View>
                         <View style={styles.fareDisplay}>
                             {
@@ -48,13 +127,12 @@ class IssueTicketScreen extends React.Component {
                             }
                         </View>
                         <View style={{ marginTop: 75 }}>
-                            <TouchableOpacity activeOpacity={0.5} style={styles.btn}>
+                            <TouchableOpacity onPress={()=>this.handleScanQRCode()} activeOpacity={0.5} style={styles.btn}>
                                 <Text style={{ color: 'white', fontSize: 18 }}>Scan QR Code</Text>
                             </TouchableOpacity>
                         </View>
                     </Fragment>
                 }
-
             </ScrollView>
         )
     }
@@ -106,7 +184,23 @@ const styles = {
     enterFromAndTo:{
         color: 'black',
         fontSize: 18
+    },
+    label:{
+        fontSize: 18,
+        color: 'black',
+        paddingRight: 10
+    },
+    stageDropdowns:{
+        borderWidth: 1,
+        borderColor: '#b90000',
+        borderRadius: 3,
+        width: 200,
+        padding: 0
     }
 }
 
-export default IssueTicketScreen;
+const mapStateToProps = (state) => ({
+    busDetails: state.busReducer
+})
+
+export default connect(mapStateToProps)(IssueTicketScreen);

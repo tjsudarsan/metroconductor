@@ -10,9 +10,9 @@ const Routes = (props) => {
     return (
         <NativeRouter>
             <Switch>
-                {/* <Route exact path='/' component={HomeScreen} />
-                <Route path='/dashboard' component={DashboardScreen} /> */}
-                <Route path="/" component={IssueTicketScreen} />
+                <Route exact path='/' component={HomeScreen} />
+                <Route path='/dashboard' component={DashboardScreen} />
+                <Route path="/issueticket" component={IssueTicketScreen} />
             </Switch>
         </NativeRouter>
     )

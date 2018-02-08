@@ -22,7 +22,8 @@ class HomeScreen extends Component {
         if (this.state.busNo !== '') {
             initializeBus(this.state.busNo, this.state.onDuty).then(res => {
                 if (res.status) {
-                    this.props.dispatch(initializeBusAction({ busNo: this.state.busNo, onDuty: this.state.onDuty }))
+                    console.log(res.payload)
+                    this.props.dispatch(initializeBusAction({...res.payload,onDuty: true}))
                     this.props.history.push('/dashboard')
                 } else {
                     Alert.alert(
