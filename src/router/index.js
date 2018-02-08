@@ -5,6 +5,7 @@ import {NativeRouter, Route, Link, Switch} from 'react-router-native'
 import HomeScreen from '../screens/HomeScreen';
 import DashboardScreen from '../screens/DashboardScreen';
 import IssueTicketScreen from '../screens/IssueTicketScreen'
+import ScanQRCodeScreen from '../screens/ScanQRCodeScreen'
 
 const Routes = (props) => {
     return (
@@ -13,6 +14,7 @@ const Routes = (props) => {
                 <Route exact path='/' component={HomeScreen} />
                 <Route path='/dashboard' component={DashboardScreen} />
                 <Route path="/issueticket" component={IssueTicketScreen} />
+                <Route path="/scanqr" component={ScanQRCodeScreen} />
             </Switch>
         </NativeRouter>
     )

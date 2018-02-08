@@ -1,4 +1,4 @@
-const baseURL = "http://192.168.10.50:4000";
+const baseURL = "http://192.168.43.186:4000";
 
 export async function initializeBus(busNo, onDuty) {
     let result = await fetch(baseURL + '/initializebus',{
