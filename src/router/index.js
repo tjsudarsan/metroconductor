@@ -6,6 +6,7 @@ import HomeScreen from '../screens/HomeScreen';
 import DashboardScreen from '../screens/DashboardScreen';
 import IssueTicketScreen from '../screens/IssueTicketScreen'
 import ScanQRCodeScreen from '../screens/ScanQRCodeScreen'
+import PinVerificationScreen from '../screens/PinVerificationScreen'
 
 const Routes = (props) => {
     return (
@@ -15,6 +16,7 @@ const Routes = (props) => {
                 <Route path='/dashboard' component={DashboardScreen} />
                 <Route path="/issueticket" component={IssueTicketScreen} />
                 <Route path="/scanqr" component={ScanQRCodeScreen} />
+                <Route path='/pin' component={PinVerificationScreen} />
             </Switch>
         </NativeRouter>
     )

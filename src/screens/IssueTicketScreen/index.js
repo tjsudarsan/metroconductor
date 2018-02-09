@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { View, Text, ScrollView, ActivityIndicator, TextInput, TouchableOpacity, Picker, Alert } from 'react-native';
 import {connect} from 'react-redux';
 import {initializeBus} from '../../services'
-import {saveFromAndTo} from '../../redux/actions/userActions'
+import {saveFromAndTo, saveFare} from '../../redux/actions/userActions'
 
 class IssueTicketScreen extends React.Component {
     constructor() {
@@ -54,8 +54,9 @@ class IssueTicketScreen extends React.Component {
     }
 
     handleScanQRCode(){
-        if(this.state.toLocation !== null, this.state.fromLocation !== null){
+        if(this.state.toLocation !== null && this.state.fromLocation !== null){
             this.props.dispatch(saveFromAndTo(this.state.fromLocation,this.state.toLocation));
+            this.props.dispatch(saveFare(this.state.fare));
             this.props.history.push('/scanqr');
         }else{
             Alert.alert(

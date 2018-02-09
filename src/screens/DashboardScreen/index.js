@@ -11,7 +11,7 @@ class DashboardScreen extends Component {
     }
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', () => { 
-            if(this.props.history.location.pathname==='/dashboard'){
+            if(this.props.history.location.pathname ==='/dashboard'){
                 return true
             }else{
                 this.props.history.goBack();

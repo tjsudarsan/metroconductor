@@ -9,3 +9,17 @@ export const saveFromAndTo = (from,to) => {
         }
     })
 }
+
+export const saveFare = (fare)=>{
+    return ({
+        type: 'SAVE_FARE',
+        payload: fare
+    })
+}
+
+export const saveUid = (uid) => {
+    return ({
+        type: 'SAVE_UID',
+        payload: uid
+    })
+}
