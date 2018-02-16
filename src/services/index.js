@@ -1,4 +1,4 @@
-const baseURL = "http://192.168.43.186:4000";
+const baseURL = "https://mtcticketing.herokuapp.com";
 
 export async function initializeBus(busNo, onDuty) {
     let result = await fetch(baseURL + '/initializebus',{
