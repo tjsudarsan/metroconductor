@@ -9,6 +9,7 @@
   "dependencies": {
     "buffer": "^5.0.8",
     "events": "^2.0.0",
+    "firebase": "^4.10.1",
     "react": "16.2.0",
     "react-native": "0.53.0",
     "react-native-camera": "^0.13.0",

@@ -4,25 +4,42 @@ import { connect } from 'react-redux';
 import logoutIcon from '../../assests/logouticon.png'
 import { initializeBus } from '../../services';
 import { initializeBusAction } from '../../redux/actions/busActions'
+import database from '../../services/firebase';
 
 class DashboardScreen extends Component {
     state = {
         isLoading: false
     }
+
+    locationId = null;
+
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', () => { 
-            if(this.props.history.location.pathname ==='/dashboard'){
+            if(this.props.history.location.pathname ==='/dashboard' && this.props.history.location.pathname === '/'){
                 return true
             }else{
                 this.props.history.goBack();
                 return true;
             }
          })
+
+        this.locationId = navigator.geolocation.watchPosition(({coords})=>{
+            database.ref(`buses/${this.props.busDetails.busNo}`).set({
+                latitude: coords.latitude,
+                longitude: coords.longitude
+            })
+        },err=>console.log(err), {enableHighAccuracy: true, distanceFilter: 10, timeout: 5000, maximumAge: 0})
     }
+
     handleLogout() {
         this.setState({isLoading: true})
         initializeBus(this.props.busDetails.busNo, false).then(res => {
             if (res.status === true) {
+                navigator.geolocation.clearWatch(this.locationId);
+                database.ref(`buses/${this.props.busDetails.busNo}`).set({
+                    latitude: 0,
+                    longitude: 0
+                })
                 this.props.dispatch(initializeBusAction({ busNo: null, onDuty: false }));
                 this.props.history.push('/');
             }
