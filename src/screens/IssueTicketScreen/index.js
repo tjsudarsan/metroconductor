@@ -13,7 +13,8 @@ class IssueTicketScreen extends React.Component {
             fare: null,
             fromLocation: null,
             toLocation: null,
-            busDetails: {}
+            busDetails: {},
+            noOfTickets: 1
         }
     }
 
@@ -55,8 +56,8 @@ class IssueTicketScreen extends React.Component {
 
     handleScanQRCode(){
         if(this.state.toLocation !== null && this.state.fromLocation !== null){
-            this.props.dispatch(saveFromAndTo(this.state.fromLocation,this.state.toLocation));
-            this.props.dispatch(saveFare(this.state.fare));
+            this.props.dispatch(saveFromAndTo(this.state.fromLocation,this.state.toLocation,this.state.noOfTickets));
+            this.props.dispatch(saveFare(this.state.fare * this.state.noOfTickets));
             this.props.history.push('/scanqr');
         }else{
             Alert.alert(
@@ -115,12 +116,32 @@ class IssueTicketScreen extends React.Component {
                                 </Picker>
                             </View>
                         </View>
+                        <View style={{flexDirection: 'row', alignItems: 'center',marginTop: 10}}>
+                            <Text style={{color: '#b90000', fontSize: 18, flex: 2, textAlign: 'center'}}>No of Tickets: </Text>
+                            <Picker
+                                style={{width: 20, color: '#b90000', flex:1}}
+                                mode="dropdown"
+                                selectedValue={this.state.noOfTickets}
+                                onValueChange={(itemValue)=>this.setState({noOfTickets: itemValue})}
+                            >
+                                <Picker.Item label={"1"} value={1} />
+                                <Picker.Item label={"2"} value={2} />
+                                <Picker.Item label={"3"} value={3} />
+                                <Picker.Item label={"4"} value={4} />
+                                <Picker.Item label={"5"} value={5} />
+                                <Picker.Item label={"6"} value={6} />
+                                <Picker.Item label={"7"} value={7} />
+                                <Picker.Item label={"8"} value={8} />
+                                <Picker.Item label={"9"} value={9} />
+                                <Picker.Item label={"10"} value={10} />
+                            </Picker>
+                        </View>
                         <View style={styles.fareDisplay}>
                             {
                                 this.state.isFareLoading ? <ActivityIndicator size={75} color="#b90000" />
                                 :
                                 <Fragment>
-                                    {   this.state.fare ? <Text style={styles.fare}>{`₹ ${this.state.fare} /-`}</Text>
+                                    {   this.state.fare ? <Text style={styles.fare}>{`₹ ${this.state.fare * this.state.noOfTickets} /-`}</Text>
                                         :
                                         <Text style={styles.enterFromAndTo}>Select "From" and "To"</Text>
                                     }
@@ -162,7 +183,7 @@ const styles = {
         fontSize: 18
     },
     fareDisplay: {
-        marginTop: 75,
+        marginTop: 25,
     },
     fare: {
         fontSize: 50,

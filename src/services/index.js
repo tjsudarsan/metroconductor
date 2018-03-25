@@ -32,7 +32,7 @@ export async function checkWallet(uid,fare) {
     return result.json();
 }
 
-export async function payTicket(uid,fare,from,to){
+export async function payTicket(uid,fare,from,to,noOfTickets){
     let result = await fetch(baseURL + '/generateticket',{
         method: 'POST',
         headers: {
@@ -43,7 +43,8 @@ export async function payTicket(uid,fare,from,to){
             uid,
             fare,
             from,
-            to
+            to,
+            noOfTickets
         })
     });
     

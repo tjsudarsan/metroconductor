@@ -4,7 +4,8 @@ const defaultState = {
     uid: null,
     from : null,
     to: null,
-    fare: null
+    fare: null,
+    noOfTickets: 1
 }
 
 export default (state = defaultState, actions) => {

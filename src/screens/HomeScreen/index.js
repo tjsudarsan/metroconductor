@@ -14,7 +14,7 @@ class HomeScreen extends Component {
     }
     componentDidMount() {
         if (this.props.busDetails.busNo) {
-            this.props.history.push('/dashboard')
+            this.props.history.replace('/dashboard')
         }
     }
     handleInitialize() {
@@ -24,7 +24,7 @@ class HomeScreen extends Component {
                 if (res.status) {
                     console.log(res.payload)
                     this.props.dispatch(initializeBusAction({...res.payload,onDuty: true}))
-                    this.props.history.push('/dashboard')
+                    this.props.history.replace('/dashboard')
                 } else {
                     Alert.alert(
                         'Error',

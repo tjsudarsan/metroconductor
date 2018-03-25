@@ -21,7 +21,9 @@ class DashboardScreen extends Component {
                 this.props.history.goBack();
                 return true;
             }
-         })
+        })
+
+        console.log(this.props.history)
 
         this.locationId = navigator.geolocation.watchPosition(({coords})=>{
             database.ref(`buses/${this.props.busDetails.busNo}`).set({
@@ -41,7 +43,7 @@ class DashboardScreen extends Component {
                     longitude: 0
                 })
                 this.props.dispatch(initializeBusAction({ busNo: null, onDuty: false }));
-                this.props.history.push('/');
+                this.props.history.replace('/');
             }
         })
     }

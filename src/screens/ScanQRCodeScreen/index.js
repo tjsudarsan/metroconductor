@@ -23,7 +23,7 @@ class ScanQRCodeScreen extends Component {
         checkWallet(result.PrintLetterBarcodeData.$.uid,this.props.fare).then((res)=>{
           if(res.status === true){
             this.props.dispatch(saveUid(result.PrintLetterBarcodeData.$.uid));
-            this.props.history.push('/pin');
+            this.props.history.replace('/pin');
           }else {
             this.scanner.reactivate();
             Alert.alert(

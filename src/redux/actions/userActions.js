@@ -1,11 +1,12 @@
 import React from 'react';
 
-export const saveFromAndTo = (from,to) => {
+export const saveFromAndTo = (from,to,noOfTickets) => {
     return ({
         type: 'SAVE_FROM_AND_TO',
         payload: {
             from,
-            to
+            to,
+            noOfTickets
         }
     })
 }

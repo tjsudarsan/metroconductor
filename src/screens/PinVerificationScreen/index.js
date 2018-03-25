@@ -12,14 +12,14 @@ class PinVerificationScreen extends Component {
         if (this.state.pinNumber.toString().length === 4) {
             this.setState({ isLoading: true })
             var details = this.props.userDetails;
-            payTicket(details.uid, details.fare, details.from, details.to)
+            payTicket(details.uid, details.fare, details.from, details.to, details.noOfTickets)
                 .then(res => {
                     if (res.status === true) {
                         this.setState({ isLoading: false })
                         Alert.alert(
                             'Success!',
                             'Ticket generated.',
-                            [{ text: 'OK', onPress: () => this.props.history.push('/issueticket') }],
+                            [{ text: 'OK', onPress: () => this.props.history.replace('/issueticket') }],
                             { cancelable: false }
                         )
                     } else {
@@ -27,7 +27,7 @@ class PinVerificationScreen extends Component {
                         Alert.alert(
                             'Attention!',
                             'Something went wrong try again later.'
-                            [{ text: 'OK', onPress: () => this.props.history.push('/issueticket') }],
+                            [{ text: 'OK', onPress: () => this.props.history.replace('/issueticket') }],
                             { cancelable: false }
                         )
                     }
@@ -36,7 +36,7 @@ class PinVerificationScreen extends Component {
             Alert.alert(
                 'Attention!',
                 'Enter 4-digit PIN Number'
-                [{ text: 'OK', onPress: () => this.props.history.push('/issueticket') }],
+                [{ text: 'OK'}],
                 { cancelable: false }
             )
         }
