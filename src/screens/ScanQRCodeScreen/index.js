@@ -7,33 +7,51 @@ import {
 } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {parseString} from 'xml2js';
-import {checkWallet} from '../../services'
+import {checkWallet, checkTicket} from '../../services'
 import {connect} from 'react-redux';
-import {saveUid} from '../../redux/actions/userActions'
+import {saveUid, storeTravelHistory} from '../../redux/actions/userActions'
 
 class ScanQRCodeScreen extends Component {
-  
+
   componentDidMount(){
-    // this.scanner.reactivate();
+    console.log(this.props.match.params.mode)
   }
+
   onSuccess(e){
     this.setState({isLoading: true})
     parseString(e.data,{trim: true},(err,result)=>{
       if(result.PrintLetterBarcodeData.$.uid.toString().length === 12){
-        checkWallet(result.PrintLetterBarcodeData.$.uid,this.props.fare).then((res)=>{
-          if(res.status === true){
-            this.props.dispatch(saveUid(result.PrintLetterBarcodeData.$.uid));
-            this.props.history.replace('/pin');
-          }else {
-            this.scanner.reactivate();
-            Alert.alert(
-              'Attention!',
-              res.error,
-              [{text: 'OK'}],
-              {cancelable: false}
-            )
-          }
-        })
+        if(this.props.match.params.mode === 'ticketing'){
+          checkWallet(result.PrintLetterBarcodeData.$.uid,this.props.fare).then((res)=>{
+            if(res.status === true){
+              this.props.dispatch(saveUid(result.PrintLetterBarcodeData.$.uid));
+              this.props.history.replace('/pin');
+            }else {
+              this.scanner.reactivate();
+              Alert.alert(
+                'Attention!',
+                res.error,
+                [{text: 'OK'}],
+                {cancelable: false}
+              )
+            }
+          })
+        }else if(this.props.match.params.mode === 'checkticket'){
+          checkTicket(result.PrintLetterBarcodeData.$.uid).then((res)=>{
+            if(res.status === true){
+              this.props.dispatch(storeTravelHistory(res.payload));
+              this.props.history.push('/displaytickets')
+            }else if(res.status === false){
+              this.scanner.reactivate();
+              Alert.alert(
+                'Attention!',
+                res.error,
+                [{text: 'Ok'}],
+                {cancelable: false}
+              )
+            }
+          })
+        }
         // this.setState({
         //   data: result.PrintLetterBarcodeData.$.uid
         // })
@@ -49,6 +67,7 @@ class ScanQRCodeScreen extends Component {
     })
   }
   render() {
+    
     return (
       <View style={styles.container}>
         <QRCodeScanner 
@@ -60,7 +79,6 @@ class ScanQRCodeScreen extends Component {
           bottomContent={
             <Text style={styles.text}>Please show the QR code inside the green marker</Text>
           }
-          reactivate={true}
           showMarker={true}
           reactivateTimeout={1000}
           style={{flex:1}}

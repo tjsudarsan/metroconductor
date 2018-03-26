@@ -58,7 +58,7 @@ class IssueTicketScreen extends React.Component {
         if(this.state.toLocation !== null && this.state.fromLocation !== null){
             this.props.dispatch(saveFromAndTo(this.state.fromLocation,this.state.toLocation,this.state.noOfTickets));
             this.props.dispatch(saveFare(this.state.fare * this.state.noOfTickets));
-            this.props.history.push('/scanqr');
+            this.props.history.push('/scanqr/ticketing');
         }else{
             Alert.alert(
                 'Attention!',

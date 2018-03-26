@@ -5,7 +5,8 @@ const defaultState = {
     from : null,
     to: null,
     fare: null,
-    noOfTickets: 1
+    noOfTickets: 1,
+    travelHistory: []
 }
 
 export default (state = defaultState, actions) => {
@@ -18,6 +19,9 @@ export default (state = defaultState, actions) => {
 
         case 'SAVE_UID':
             return {...state, uid: actions.payload}
+
+        case 'STORE_TRAVEL_HISTORY':
+            return {...state, travelHistory: actions.payload}
 
         default:
             return state

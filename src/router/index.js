@@ -8,6 +8,7 @@ import IssueTicketScreen from '../screens/IssueTicketScreen'
 import ScanQRCodeScreen from '../screens/ScanQRCodeScreen'
 import PinVerificationScreen from '../screens/PinVerificationScreen'
 import FingerprintRecognitionScreen from '../screens/FingerprintRecognitionScreen';
+import TicketHistoryScreen from '../screens/TicketHistoryScreen'
 
 const Routes = (props) => {
     return (
@@ -17,8 +18,9 @@ const Routes = (props) => {
                 <Route path='/dashboard' component={DashboardScreen} />
                 <Route path="/issueticket" component={IssueTicketScreen} />
                 <Route path="/fingerprint" component={FingerprintRecognitionScreen} />
-                <Route path="/scanqr" component={ScanQRCodeScreen} />
+                <Route path="/scanqr/:mode" component={ScanQRCodeScreen} />
                 <Route path='/pin' component={PinVerificationScreen} />
+                <Route path='/displaytickets' component={TicketHistoryScreen} />
             </Switch>
         </NativeRouter>
     )

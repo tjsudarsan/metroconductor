@@ -24,3 +24,8 @@ export const saveUid = (uid) => {
         payload: uid
     })
 }
+
+export const storeTravelHistory = (travelHistory) => ({
+    type: 'STORE_TRAVEL_HISTORY',
+    payload: travelHistory
+})

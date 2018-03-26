@@ -50,3 +50,18 @@ export async function payTicket(uid,fare,from,to,noOfTickets){
     
     return result.json();
 }
+
+export async function checkTicket(uid){
+    let result = await fetch(baseURL + '/checkticket',{
+        method: 'POST',
+        headers: {
+            'Accept': 'applicaton/json',
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify({
+            uid
+        })
+    });
+    
+    return result.json();
+}

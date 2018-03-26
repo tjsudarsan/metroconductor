@@ -73,6 +73,11 @@ class DashboardScreen extends Component {
                                 <Text style={styles.btnTxt}>Issue Ticket</Text>
                             </TouchableOpacity>
                         </View>
+                        <View>
+                            <TouchableOpacity activeOpacity={0.8} style={styles.btn} onPress={()=>this.props.history.push('/scanqr/checkticket')}>
+                                <Text style={styles.btnTxt}>Check Ticket</Text>
+                            </TouchableOpacity>
+                        </View>
                     </Fragment>
                 }
             </View>
